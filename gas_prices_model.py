@@ -6,6 +6,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.impute import SimpleImputer
 import shap
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
+
 
 # Load data
 data = pd.read_csv('gas_data.csv')
@@ -33,9 +35,20 @@ test_data = data[data['Year'].isin(test_years)]
 # Initialize a dictionary to store results
 results = {}
 
-# Subplots
-fig, axes = plt.subplots(5, 1, figsize=(10, 30))
-fig.tight_layout(pad=5.0)
+# Prepare the subplots using GridSpec for custom layout
+fig = plt.figure(figsize=(30, 45))
+gs = gridspec.GridSpec(3, 2, height_ratios=[1, 1, 1], width_ratios=[1, 1])
+
+# Axes list for custom placement
+axes = [
+    fig.add_subplot(gs[0, 0]),
+    fig.add_subplot(gs[0, 1]),
+    fig.add_subplot(gs[1, 0]),
+    fig.add_subplot(gs[1, 1]),
+    fig.add_subplot(gs[2, 0]),
+    fig.add_subplot(gs[2, 1])
+]
+
 
 for i, target in enumerate(targets):
     X_train = train_data[features]
@@ -58,14 +71,22 @@ for i, target in enumerate(targets):
     explainer = shap.Explainer(model, X_train)
     shap_values = explainer(X_test)
     
-    # Plot SHAP values# Plot SHAP values
+    # Plot SHAP values
     plt.sca(axes[i])
     shap.summary_plot(shap_values, X_test, feature_names=features, show=False, plot_type='bar')
-    axes[i].set_title(f'SHAP Values for {target}')
+    axes[i].set_title(f'SHAP Values for {target}', fontsize=12, fontweight='bold')
+    axes[i].set_xlabel('SHAP Value')
+    
+    # Remove the mean(|SHAP value|) bar
+    if axes[i].get_legend() is not None and len(axes[i].get_legend().get_texts()) > 1:
+        axes[i].get_legend().remove()
+
     
 # Display results
 for target, mse in results.items():
     print(f'Mean Squared Error for {target}: {mse}')
 
+axes[5].axis('off')
 plt.savefig(f'shap_values.png')
+plt.tight_layout()
 plt.show()
