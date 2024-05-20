@@ -59,8 +59,10 @@ for i, target in enumerate(targets):
     shap_values = explainer(X_test)
     
     # Plot SHAP values# Plot SHAP values
-    shap.summary_plot(shap_values, X_test, feature_names=features, show=False, plot_type='bar', ax=axes[i])
+    plt.sca(axes[i])
+    shap.summary_plot(shap_values, X_test, feature_names=features, show=False, plot_type='bar')
     axes[i].set_title(f'SHAP Values for {target}')
+    
 # Display results
 for target, mse in results.items():
     print(f'Mean Squared Error for {target}: {mse}')
