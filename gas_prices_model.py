@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
+from sklearn.impute import SimpleImputer
 import shap
 import matplotlib.pyplot as plt
 
@@ -14,7 +15,15 @@ features = ['Real Price of Gasoline', 'Annual Vehicle Miles', 'Vehicle Fuel Effi
 targets = ['Income Quintile 1', 'Income Quintile 2', 'Income Quintile 3', 'Income Quintile 4', 'Income Quintile 5']
 
 # Fill missing values in 'Threat of Climate Change**' column using mean imputation
-data['Threat of Climate Change**'].fillna(data['Threat of Climate Change**'].mean(), inplace=True)
+data['Threat of Climate Change'].fillna(data['Threat of Climate Change'].mean(), inplace=True)
+
+# Verify there are no other missing values in the dataset
+if data.isnull().sum().any():
+    print("Warning: There are still missing values in the dataset.")
+    # Handling remaining missing values using SimpleImputer
+    imputer = SimpleImputer(strategy='mean')
+    data[features] = imputer.fit_transform(data[features])
+
 
 # Split the data into training and testing sets (random sample of 10 years for testing)
 test_years = np.random.choice(data['Year'].unique(), size=10, replace=False)
