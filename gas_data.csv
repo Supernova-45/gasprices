@@ -1,4 +1,4 @@
-﻿Year,Income Quintile 1,Income Quintile 2,Income Quintile 3,Income Quintile 4,Income Quintile 5,Real Price of Gasoline,Annual Vehicle Miles,Vehicle Fuel Efficiency*,Real U.S. GDP,Threat of Climate Change**,Unemployment %
+﻿Year,Income Quintile 1,Income Quintile 2,Income Quintile 3,Income Quintile 4,Income Quintile 5,Real Price of Gasoline,Annual Vehicle Miles,Vehicle Fuel Efficiency,Real U.S. GDP,Threat of Climate Change,Unemployment %
 1984,559,797,1056,1301,1649,3.539,1657857,27,4.03761E+12,,8
 1985,538,781,1011,1319,1578,3.378,1720246,27.5,4.33898E+12,,7.3
 1986,488,657,905,1167,1395,2.577,1787798,26,4.57963E+12,,6.7
