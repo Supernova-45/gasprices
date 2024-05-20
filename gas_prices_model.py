@@ -33,7 +33,11 @@ test_data = data[data['Year'].isin(test_years)]
 # Initialize a dictionary to store results
 results = {}
 
-for target in targets:
+# Subplots
+fig, axes = plt.subplots(5, 1, figsize=(10, 30))
+fig.tight_layout(pad=5.0)
+
+for i, target in enumerate(targets):
     X_train = train_data[features]
     y_train = train_data[target]
     X_test = test_data[features]
@@ -54,13 +58,12 @@ for target in targets:
     explainer = shap.Explainer(model, X_train)
     shap_values = explainer(X_test)
     
-    # Plot SHAP values
-    plt.figure(figsize=(10, 6))
-    shap.summary_plot(shap_values, X_test, feature_names=features, show=False)
-    plt.title(f'SHAP Values for {target}')
-    plt.savefig(f'shap_values_{target}.png')
-    plt.show()
-
+    # Plot SHAP values# Plot SHAP values
+    shap.summary_plot(shap_values, X_test, feature_names=features, show=False, plot_type='bar', ax=axes[i])
+    axes[i].set_title(f'SHAP Values for {target}')
 # Display results
 for target, mse in results.items():
     print(f'Mean Squared Error for {target}: {mse}')
+
+plt.savefig(f'shap_values.png')
+plt.show()
